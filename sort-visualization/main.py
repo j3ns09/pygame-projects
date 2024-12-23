@@ -9,6 +9,7 @@ values = np.empty(8, dtype="O")
 w = 10
 c = 15
 padding = 5
+maximum = 0
 
 def gen_random_values():
     global screen
@@ -16,6 +17,7 @@ def gen_random_values():
     for i in range(n):
         random_num = random.randint(1, 100)
         values[i] = Item(screen, random_num, i, n)
+    maximum = max(values)
 
 def setup():
     global screen, clock, running

@@ -15,7 +15,7 @@ class Item:
     def update(self, i):
         self.x = (i+1) * (self.screen.get_width()/(self.__n + 1))
 
-    def show(self):
+    def show(self, max=None):
         width, height = self.screen.get_size()
 
         if self.is_selected:

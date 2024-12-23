@@ -11,7 +11,7 @@ class Spot:
 
         self.neighbours : list[Spot] = []
         self.previous : None | Spot = None
-        self.is_wall = random() < 0
+        self.is_wall = random() < .35
 
     def add_neighbours(self, grid):
         i, j = self.i, self.j

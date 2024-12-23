@@ -1,6 +1,5 @@
 import numpy as np
 import pygame
-import math
 
 from spot import Spot
 
@@ -25,7 +24,7 @@ def draw_spot(screen, rgb, spot):
     pygame.draw.rect(screen, rgb, pygame.Rect(spot.i*w, spot.j*h, w-1, h-1))
 
 def heuristic(a: Spot, b: Spot):
-    return math.dist((a.i, a.j), (b.i, b.j))
+    return b.i - a.i + b.j - a.j
 
 def setup():
     global screen, running, clock
@@ -138,7 +137,8 @@ def update_logic():
         if not no_solution:
             print("No solution")
             no_solution = True
-            pygame.time.wait(10000)
+        else:
+            return
 
 def main():
     setup()
