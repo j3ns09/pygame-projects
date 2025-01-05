@@ -19,12 +19,16 @@ class Item:
         width, height = self.screen.get_size()
 
         if self.is_selected:
-            pygame.draw.rect(self.screen, (255, 0, 0), pygame.Rect(self.x, self.y, width/(80), math.log(self.val)))
+            pygame.draw.rect(self.screen, (255, 0, 0), pygame.Rect(self.x, self.y, width/(80), self.val * 15 - 5))
         else:
             pygame.draw.rect(self.screen, (255, 255, 255), pygame.Rect(self.x, self.y, width/(80), self.val * 15 - 5))
 
     def rev_select(self):
         self.is_selected = not self.is_selected
+
+    def __gt__(self, other):
+        if isinstance(other, Item):
+            return self.val > other.val
 
     def __repr__(self):
         return f"{self.x, self.y}"

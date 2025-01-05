@@ -31,7 +31,7 @@ def setup():
     gen_random_values()
     values[0].is_selected = True
 
-    # print(values)
+    print(values)
 
 def update_gui():
     global screen, clock
@@ -60,6 +60,8 @@ def check_events():
         if event.type == pygame.KEYDOWN:
             if event.key in (pygame.K_q, pygame.K_ESCAPE):
                 running = False
+            if event.key == pygame.K_RETURN:
+                gen_random_values()
 
 def main():
     global running
