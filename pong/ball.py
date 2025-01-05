@@ -13,8 +13,7 @@ class Ball:
         self.window : pygame.Surface = window
 
     def initialize(self):
-        self.x = 0
-        self.y = 0
+        self.x, self.y = map(lambda x: x * .5, self.window.get_size())
 
         self.dx = choice([uniform(-1, -2.5), uniform(1, 2.5)])
         self.dy = uniform(1, 2.5)

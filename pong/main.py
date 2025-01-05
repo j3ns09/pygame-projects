@@ -24,7 +24,10 @@ def setup():
     player1 = Paddle(True, screen)
     player2 = Paddle(False, screen)
 
-    mObjects = [ball, player1, player2]
+    mObjects = {"ball" : ball,
+                "p1" : player1,
+                "p2" : player2
+            }
 
 
 
@@ -36,18 +39,18 @@ def update_gui():
 
     font = pygame.font.SysFont("cascadiacode", 36)
 
+    ball, player1, player2 = mObjects.values()
 
-    for obj in mObjects:
-        if isinstance(obj, Paddle):
-            text_surface = font.render(str(obj.score), True, (255, 255, 255))
-            if obj.isleft:
-                text_rect1 = text_surface.get_rect(center=(20, 20))
-                screen.blit(text_surface, text_rect1)
-            else:
-                text_rect2 = text_surface.get_rect(center=(WIDTH - 20, 20))
-                screen.blit(text_surface, text_rect2)
+    text_surface1 = font.render(str(player1.score), True, (255, 255, 255))
+    text_surface2 = font.render(str(player2.score), True, (255, 255, 255))
 
-        obj.show()
+    text_rect1 = text_surface1.get_rect(center=(20, 20))
+    screen.blit(text_surface1, text_rect1)
+
+    text_rect2 = text_surface2.get_rect(center=(WIDTH - 20, 20))
+    screen.blit(text_surface2, text_rect2)
+
+    ball.show(), player1.show(), player2.show()
 
     pygame.display.flip()
     clock.tick(60)
@@ -58,7 +61,7 @@ def update_logic():
 
     keys = pygame.key.get_pressed()
 
-    ball, player1, player2 = mObjects
+    ball, player1, player2 = mObjects.values()
 
     if ((player1.y + player1.h >= ball.y >= player1.y) and (ball.x - ball.r < player1.x + player1.w)) or ((player2.y + player2.h >= ball.y >= player2.y) and (ball.x + ball.r > player2.x)):
         ball.tap()
