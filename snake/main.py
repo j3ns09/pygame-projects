@@ -14,9 +14,6 @@ screen, clock = None, None
 
 # My variables
 
-# 0 for nothing, 1 for obstacles, 2 for apples
-grid = [[0 for j in range(COLS)] for i in range(ROWS)]
-
 # Apple coordinates
 apple = (random.randint(0,ROWS-1), random.randint(0,COLS-1))
 
@@ -36,8 +33,6 @@ def get_apple():
     apple = (random.randint(0,ROWS-1), random.randint(0,COLS-1))
     while apple in snake_set:
         apple = (random.randint(0,ROWS-1), random.randint(0,COLS-1))
-    
-
 
 def setup():
     global screen, clock
