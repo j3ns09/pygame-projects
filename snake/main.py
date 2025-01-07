@@ -5,7 +5,7 @@ import pygame
 WIDTH, HEIGHT = 600, 600
 TITLE = "Snake game"
 
-RESOLUTION = 20
+RESOLUTION = 120
 ROWS, COLS = WIDTH // RESOLUTION, HEIGHT // RESOLUTION
 
 # Pygame variables
@@ -27,6 +27,8 @@ snake_set = set()
 # 3 being left
 # 4 being up
 vec = 1
+
+boosting = False
 
 def get_apple():
     global apple
@@ -53,15 +55,18 @@ def update_gui():
     screen.fill('black')
 
     for x, y in snake:
-        pygame.draw.rect(screen, 'green', pygame.Rect(x * RESOLUTION, y * RESOLUTION, RESOLUTION - 1, RESOLUTION - 1))
-    
+        pygame.draw.rect(screen, 'green', pygame.Rect(x * RESOLUTION, y * RESOLUTION, RESOLUTION, RESOLUTION))
+        # pygame.draw.circle(screen, 'green', (x * RESOLUTION, y * RESOLUTION), RESOLUTION//3)
     
     ax, ay = apple
     pygame.draw.rect(screen, 'red', pygame.Rect(ax * RESOLUTION, ay * RESOLUTION, RESOLUTION, RESOLUTION))
- 
+    # pygame.draw.circle(screen, 'red', (ax * RESOLUTION, ay * RESOLUTION), RESOLUTION//3)
 
     pygame.display.flip()
-    clock.tick(10)
+    if not boosting:
+        clock.tick(10)
+    else:
+        clock.tick(60)
 
 def update_logic():
     global running
@@ -78,7 +83,7 @@ def update_logic():
 
     new_coord = (x,y)
 
-    if new_coord in snake_set:
+    if new_coord in snake_set or (new_coord[0] > COLS or new_coord[0] < 0) or (new_coord[1] > ROWS or new_coord[1] < 0):
         print("Game over!")
         running = False
 
@@ -94,6 +99,7 @@ def update_logic():
 def check_inputs():
     global vec
     global running
+    global boosting
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -110,15 +116,22 @@ def check_inputs():
                 vec = 3
             if event.key == pygame.K_UP and vec != 2:
                 vec = 4
+            
+            if event.key == pygame.K_SPACE:
+                boosting = True
 
+        if event.type == pygame.KEYUP:
+            if event.key == pygame.K_SPACE:
+                boosting = False
 def main():
     setup()
 
     while running:
+        check_inputs()
+        
         update_logic()
         update_gui()
 
-        check_inputs()
 
 if __name__ == '__main__':
     main()

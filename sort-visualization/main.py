@@ -37,7 +37,6 @@ def setup():
     gen_random_values()
     values[0].is_selected = True
 
-<<<<<<< HEAD
 def selection():
     n = len(values)
 
@@ -53,9 +52,7 @@ def selection():
         max.show()    
         values[i], values[j] = values[j], values[i]
 
-=======
     print(values)
->>>>>>> 2dd805f4525f2ac2a944f7a134d37bc3e6706d83
 
 def update_gui():
     global screen, clock
@@ -86,11 +83,8 @@ def check_events():
             if event.key in (pygame.K_q, pygame.K_ESCAPE):
                 running = False
             if event.key == pygame.K_RETURN:
-<<<<<<< HEAD
                 pause = not pause
-=======
                 gen_random_values()
->>>>>>> 2dd805f4525f2ac2a944f7a134d37bc3e6706d83
 
 def main():
     global running
