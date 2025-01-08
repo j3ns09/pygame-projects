@@ -25,9 +25,16 @@ class Ball:
         if self.y < 0 or self.y > self.window.get_height():
             self.dy *= -1
 
-    def tap(self):
+    def tap(self, paddle):
+        speed = np.sqrt(self.dx**2 + self.dy**2)
+
+        offset = (self.y + self.r - paddle.y) / (paddle.h + self.r)
+        phi = 0.25 * np.pi * (2 * offset - 1)
+
         self.dx += self.dx * 0.2
         self.dx *= -1
+
+        self.dy = speed * np.sin(phi)
 
         print("ball speed:", round(np.sqrt(self.dx**2 + self.dy**2), 2), "px/f")
         print("x:", self.x, "y:", self.y)

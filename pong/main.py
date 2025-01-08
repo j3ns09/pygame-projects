@@ -63,8 +63,11 @@ def update_logic():
 
     ball, player1, player2 = mObjects.values()
 
-    if ((player1.y + player1.h >= ball.y >= player1.y) and (ball.x - ball.r < player1.x + player1.w)) or ((player2.y + player2.h >= ball.y >= player2.y) and (ball.x + ball.r > player2.x)):
-        ball.tap()
+    if (player1.y + player1.h >= ball.y >= player1.y) and (ball.x - ball.r < player1.x + player1.w):
+        ball.tap(player1)
+    
+    if (player2.y + player2.h >= ball.y >= player2.y) and (ball.x + ball.r > player2.x):
+        ball.tap(player2)
 
     if ball.x < 0:
         player2.score += 1
