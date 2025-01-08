@@ -2,14 +2,15 @@ import random
 import pygame
 
 # Constants
-WIDTH, HEIGHT = 700, 700
+WIDTH, HEIGHT = 1000, 1000
 TITLE = "Conway's game of Life"
 
-RESOLUTION = 7
+RESOLUTION = 20
 COLS, ROWS = WIDTH // RESOLUTION, HEIGHT // RESOLUTION
 
 # General global variable
 running = False
+framerate = 30
 
 # Pygame variables
 screen = None
@@ -51,7 +52,7 @@ def update_gui():
 
 
     pygame.display.flip()
-    clock.tick(30)
+    clock.tick(framerate)
 
 def update_logic():
     global grid
@@ -97,12 +98,17 @@ def check_inputs():
 
 def main():
     setup()
+    frame = 0
 
     while running:
         update_logic()
         update_gui()
 
         check_inputs()
+        frame += 1
+
+        if (frame % framerate) == 0:
+            print(clock.get_fps())
 
 
 if __name__ == "__main__":
