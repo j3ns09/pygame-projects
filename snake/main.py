@@ -5,7 +5,7 @@ import pygame
 WIDTH, HEIGHT = 600, 600
 TITLE = "Snake game"
 
-RESOLUTION = 120
+RESOLUTION = 6
 ROWS, COLS = WIDTH // RESOLUTION, HEIGHT // RESOLUTION
 
 # Pygame variables

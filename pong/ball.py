@@ -36,9 +36,5 @@ class Ball:
 
         self.dy = speed * np.sin(phi)
 
-        print("ball speed:", round(np.sqrt(self.dx**2 + self.dy**2), 2), "px/f")
-        print("x:", self.x, "y:", self.y)
-
-
     def show(self):
         pygame.draw.circle(self.window, (255,255,255), (self.x, self.y), self.r)
