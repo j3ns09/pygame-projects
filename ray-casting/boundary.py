@@ -1,5 +1,6 @@
-from vec2 import vec2
 import pygame
+
+vec2 = pygame.math.Vector2
 
 class Boundary:
     def __init__(self, x1, y1, x2, y2):
