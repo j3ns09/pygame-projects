@@ -7,6 +7,8 @@ running = False
 
 screen = None
 
+new_image = None
+
 def round_color(frag, factor):
     return round(factor * frag / 255) * (255/factor)
 
@@ -14,11 +16,15 @@ def round_color(frag, factor):
 def setup():
     global running
     global screen
+    global new_image
 
-    image = pygame.image.load("img/gotaga.jpg")
+    # Paste image path here
+    image_name = "private_nab_mus.png"
+    image = pygame.image.load("img/" + image_name)
     w, h = image.get_size()
-    image = pygame.transform.scale(image, (w * 2, h * 2))
-    # image = pygame.transform.grayscale(image)
+    scale = 1
+    
+    image = pygame.transform.scale(image, (w * scale, h * scale))
 
     image_width, image_height = image.get_size()
 
@@ -27,18 +33,23 @@ def setup():
     running = True
 
     screen.blit(image, (0,0))
+    pygame.display.flip()
 
+    image = pygame.transform.grayscale(image)
+    new_image = pygame.Surface((w * scale,h * scale))
+
+    print("Processing...")
     for y in range(image_height - 1):
         for x in range(1, image_width - 1):
             color = image.get_at((x, y))
 
             old_r, old_g, old_b, a = color
 
-            new_r = round_color(old_r, 4)
-            new_g = round_color(old_g, 4)
-            new_b = round_color(old_b, 4)
+            new_r = round_color(old_r, 2)
+            new_g = round_color(old_g, 2)
+            new_b = round_color(old_b, 2)
 
-            image.set_at((x, y), (new_r,new_g,new_b,a))
+            new_image.set_at((x, y), (new_r,new_g,new_b,a))
 
             err_r = old_r - new_r
             err_g = old_g - new_g
@@ -51,13 +62,10 @@ def setup():
                 
                 # Convertir en valeurs valides et entières
                 new_c = tuple(int(min(max(c, 0), 255)) for c in new_c)
-                image.set_at((x + dx, y + dy), new_c)  # Garder la composante alpha inchangée
-
-
-    screen.blit(image, (image_width, 0))
-
-    pygame.display.flip()
-
+                new_image.set_at((x + dx, y + dy), new_c)  # Garder la composante alpha inchangée
+        screen.blit(new_image, (image_width, 0))
+        pygame.display.flip()
+    print("Job done.")
 
 def check_inputs():
     global running 
@@ -75,6 +83,14 @@ def main():
 
     while running:
         check_inputs()
+    
+    response = input("Save newly processed image ? (y/n): ")
+
+    if response == "y":
+        name = input("Give a name to the file (no extension)\nName : ")
+        pygame.image.save(new_image, name + ".png")
+    else:
+        print("OK")
 
 if __name__ == '__main__':
     main()

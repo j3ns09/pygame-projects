@@ -1,8 +1,8 @@
 import random
 import pygame
 
-from boundary import Boundary
-from particle import Particle
+from assets.boundary import Boundary
+from assets.particle import Particle
 
 # Constants
 WIDTH, HEIGHT = 800, 800

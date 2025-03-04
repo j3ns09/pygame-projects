@@ -9,10 +9,12 @@ WIDTH : int = 1000
 HEIGHT : int = 1000
 TITLE : str = "Conway's game of Life"
 
-RESOLUTION : int = 2
+RESOLUTION : int = 10
 
 COLS : int = WIDTH // RESOLUTION
 ROWS : int = HEIGHT // RESOLUTION
+
+coord_mask : int = 0xFFFF
 
 # General global variable
 running : bool = False
@@ -27,10 +29,10 @@ grid : np.ndarray | None = None
 
 @numba.njit(parallel=True)
 def get_random_grid(rows, cols) -> np.ndarray:
-    new = np.zeros((ROWS, COLS))
+    new = np.zeros((rows * cols))
     for i in numba.prange(rows):
         for j in numba.prange(cols):
-            new[i, j] = random.randint(0,1)
+            new[i * cols + j] = random.randint(0,1)
     return new
 
 
@@ -46,46 +48,63 @@ def setup() -> None:
     running = True
     grid = get_random_grid(ROWS, COLS)
 
+# @numba.njit(parallel=True)
+def get_rects(grid) -> np.ndarray:
+    temp_grid : np.ndarray = [pygame.Rect(j, i, RESOLUTION - 1, RESOLUTION - 1) for i in range(ROWS) for j in range(COLS) if grid[i * COLS + j] == 1]
+    # for i in range(ROWS):
+    #     for j in range(COLS):
+    #         if grid[i * COLS + j] == 1:
+    #             rect = pygame.Rect(j, i, RESOLUTION - 1, RESOLUTION - 1)
+    #             temp_grid[i * COLS + j] = rect
+    return temp_grid
+
 
 def update_gui() -> None:
     screen.fill('black')
 
-    rects = [
-            pygame.Rect(i * RESOLUTION, j * RESOLUTION, RESOLUTION - 1, RESOLUTION - 1)
-            for i in range(ROWS) for j in range(COLS) if grid[i, j] == 1
-        ]
+    rects = get_rects(grid)
 
     for rect in rects:
-        screen.fill('white', rect)
+        screen.fill("white", rect)
 
     pygame.display.flip()
     clock.tick(framerate)
 
 # use if numba is installed
-@numba.njit(parallel=True)
+# @numba.njit(parallel=True)
 def get_states(grid) -> np.ndarray:
-    new = np.zeros((ROWS, COLS))
+    new = np.zeros((ROWS * COLS))
 
     for i in numba.prange(1, ROWS - 1):
         for j in numba.prange(1, COLS - 1):
-            state : int = grid[i,j]
+            index = i * COLS + j
+            state : int = grid[index]
             neighbours : int = 0
 
-            neighbours += grid[i-1,j-1]
-            neighbours += grid[i-1,j+1]
-            neighbours += grid[i-1,j]
-            neighbours += grid[i,j-1]
-            neighbours += grid[i,j+1]
-            neighbours += grid[i+1,j-1]
-            neighbours += grid[i+1,j+1]
-            neighbours += grid[i+1,j]
+            # left
+            neighbours += grid[index - 1]
+            
+            neighbours += grid[index - 1 - COLS]
+            neighbours += grid[index - 1 + COLS]
+            
+            # up
+            neighbours += grid[index - COLS]
+
+            # down
+            neighbours += grid[index + COLS]
+            
+            neighbours += grid[index + 1 - COLS]
+            neighbours += grid[index + 1 + COLS]
+            
+            # right
+            neighbours += grid[index + 1]
 
             if state == 0 and neighbours == 3:
-                new[i,j] = 1
+                new[index] = 1
             elif state == 1 and (neighbours < 2 or neighbours > 3):
-                new[i,j] = 0
+                new[index] = 0
             else:
-                new[i,j] = state
+                new[index] = state
     return new
 
 def update_logic() -> None:
